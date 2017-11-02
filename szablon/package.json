@@ -19,7 +19,7 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
     "grunt-sass": "latest",
-    "matchdep": "latest",
+    "grunt-task-loader": "latest",
     "time-grunt": "latest"
   },
   "dependencies": {
