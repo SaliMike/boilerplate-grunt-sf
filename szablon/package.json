@@ -18,6 +18,7 @@
     "grunt-contrib-pug": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
+    "grunt-image": "latest",
     "grunt-sass": "latest",
     "grunt-task-loader": "latest",
     "time-grunt": "latest"
