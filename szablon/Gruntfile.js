@@ -106,6 +106,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    image: {
+      dynamic: {
+        files: [{
+          expand: true,
+          cwd: 'components/',
+          src: ['**/*.{png,jpg,gif,svg}'],
+          dest: 'components/'
+        }]
+      }
+    },
     watch: {
       scripts: {
         files: ['!scripts/main.min.js', 'libraries/*.js', 'scripts/vendor/*.js', 'components/*.js', 'components/**/*.js'],
@@ -145,6 +155,9 @@ module.exports = function(grunt) {
       },
       dev: {
         tasks: ['watch:scripts', 'watch:sass']
+      },
+      optimal: {
+        tasks: ['image']
       }
     }
   });
@@ -152,7 +165,9 @@ module.exports = function(grunt) {
   //grunt task developerski po wdrożeniu, kompilacja js i sass
   grunt.registerTask('default', ['concurrent:dev']);
   //grunt task generujący zminimalizowany kod na produkcję
-  grunt.registerTask('build', ['uglify:dist', 'sass:dist']);
+  grunt.registerTask('build', ['uglify:dist', 'sass:dist', 'concurrent:optimal']);
   //grunt task do przeznaczony do tworzenia szablonu, uruchamia live reload server
   grunt.registerTask('server', ['concurrent:front']);
+  //grunt optymalizacja zdjec
+  grunt.registerTask('optimal', ['concurrent:optimal']);
 };
