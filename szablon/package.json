@@ -6,6 +6,7 @@
     "installAll": "npm install",
     "installDev": "npm install --only=dev",
     "installProd": "npm install --only=production",
+    "default": "grunt default",
     "build": "grunt build",
     "server": "grunt server"
   },
