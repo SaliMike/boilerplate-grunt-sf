@@ -106,7 +106,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    image: {
+    imagemin: {
       dynamic: {
         files: [{
           expand: true,
@@ -157,7 +157,7 @@ module.exports = function(grunt) {
         tasks: ['watch:scripts', 'watch:sass']
       },
       optimal: {
-        tasks: ['image']
+        tasks: ['imagemin']
       }
     }
   });

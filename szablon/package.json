@@ -15,10 +15,10 @@
     "grunt-autoprefixer": "latest",
     "grunt-concurrent": "latest",
     "grunt-contrib-connect": "latest",
+    "grunt-contrib-imagemin": "^2.0.1",
     "grunt-contrib-pug": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
-    "grunt-image": "latest",
     "grunt-sass": "latest",
     "grunt-task-loader": "latest",
     "time-grunt": "latest"
