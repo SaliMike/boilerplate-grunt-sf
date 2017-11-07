@@ -32,7 +32,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'scripts/main.min.js': ['components/**/*.js']
+          'scripts/main.min.js': ['components/**/*.js', 'assets/js/**/*.js']
         },
         options: {
           transform: [
@@ -169,7 +169,7 @@ module.exports = function (grunt) {
         }
       },
       reload: {
-        files: ['components/*/src/*', '*.html', 'scripts/*', 'css/*'],
+        files: ['components/**/src/*', '*.html', 'scripts/*', 'css/*'],
         options: {
           livereload: true
         }
