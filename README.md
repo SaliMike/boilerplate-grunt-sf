@@ -5,6 +5,6 @@
 	    npm run installAll // "installAll": "npm install",
 	    npm run installDev // "installDev": "npm install --only=dev",
 	    npm run installProd // "installProd": "npm install --only=production",
-	    npm run default // "default": "grunt default",
+	    npm run prod // "prod": "grunt prod",
 	    npm run build // "build": "grunt build",
-	    npm run server // "server": "grunt server"
+	    npm run dev // "dev": "grunt dev"
