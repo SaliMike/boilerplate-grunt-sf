@@ -1,27 +1,48 @@
-module.exports = function(grunt) {
-  // load all grunt tasks
+module.exports = function (grunt) {
   require('grunt-task-loader')(grunt);
   require('time-grunt')(grunt);
 
-  //lista zewnetrznych skryptów
-  var vendorScripts = [
-    'node_modules/jquery/dist/jquery.min.js'
-  ];
-
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     uglify: {
       dist: {
-        src: [vendorScripts, 'libraries/*.js', 'components/**/*.js', '!scripts/main.min.js'],
-        dest: 'scripts/main.min.js'
-      },
+        files: {
+          'scripts/main.min.js': 'scripts/main.min.js'
+        },
+        output: {
+          comments: false
+        }
+      }
+    },
+    browserify: {
       dev: {
-        src: [vendorScripts, 'libraries/*.js', 'components/**/*.js', '!scripts/main.min.js'],
-        dest: 'scripts/main.min.js',
+        files: {
+          'scripts/main.min.js': ['components/**/*.js', 'assets/js/**/*.js']
+        },
         options: {
-          beautify: true,
-          compress: false,
-          mangle: false,
-          sourceMap: true
+          transform: [
+            ['babelify', {
+              presets: "env"
+            }]
+          ],
+          browserifyOptions: {
+            debug: true
+          }
+        }
+      },
+      dist: {
+        files: {
+          'scripts/main.min.js': ['components/**/*.js']
+        },
+        options: {
+          transform: [
+            ['babelify', {
+              presets: "env"
+            }]
+          ],
+          browserifyOptions: {
+            debug: false
+          }
         }
       }
     },
@@ -29,14 +50,15 @@ module.exports = function(grunt) {
       dist: {
         options: {
           outputStyle: 'compressed',
-          lineNumbers: false
+          lineNumbers: false,
+          sourceMap: false
         },
         files: [{
           expand: true,
           cwd: 'components',
-          src: ['*.scss', '*.sass'],
+          src: ['*.sass'],
           dest: 'css',
-          ext: '.css'
+          ext: '.min.css'
         }]
       },
       dev: {
@@ -48,24 +70,46 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'components',
-          src: ['*.scss', '*.sass'],
+          src: ['*.sass'],
           dest: 'css',
-          ext: '.css'
+          ext: '.min.css'
         }]
       },
-      tasks: ['autoprefixer']
     },
-    autoprefixer: {
-      options: {
-        browsers: ['last 2 versions', 'ie 8', 'ie 9', 'Firefox ESR', 'Opera 12.1']
+
+    postcss: {
+      dev: {
+        options: {
+          map: true,
+          processors: [
+            require('autoprefixer')({
+              browsers: ['last 2 version']
+            })
+          ]
+        },
+        dist: {
+          src: 'css/main.min.css',
+          dest: 'css/main.min.css'
+        }
       },
       dist: {
-        src: 'css/main.css',
-        dest: 'css/main.css'
+        options: {
+          map: false,
+          processors: [
+            require('autoprefixer')({
+              browsers: ['last 2 version']
+            })
+          ]
+        },
+        dist: {
+          src: 'css/main.min.css',
+          dest: 'css/main.min.css'
+        }
       }
     },
+
     pug: {
-      dev: {
+      compile: {
         options: {
           pretty: true,
           data: {
@@ -79,26 +123,12 @@ module.exports = function(grunt) {
           dest: '',
           ext: '.html'
         }]
-      },
-      dist: {
-        options: {
-          data: {
-            debug: false
-          },
-          pretty: false
-        },
-        files: [{
-          expand: true,
-          cwd: 'pug',
-          src: ['*.pug', '!_*.pug'],
-          dest: '',
-          ext: '.html'
-        }]
       }
     },
+
     connect: {
       all: {
-        options:{
+        options: {
           port: 9000,
           hostname: "0.0.0.0",
           keepalive: true,
@@ -106,6 +136,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     imagemin: {
       dynamic: {
         files: [{
@@ -116,24 +147,22 @@ module.exports = function(grunt) {
         }]
       }
     },
+
     watch: {
       scripts: {
-        files: ['!scripts/main.min.js', 'libraries/*.js', 'scripts/vendor/*.js', 'components/*.js', 'components/**/*.js'],
-        tasks: ['uglify:dev'],
-        options: {
-          spawn: false
-        }
+        files: ['components/**/*.js', 'assets/js/*.js'],
+        tasks: ['browserify:dev']
       },
       sass: {
-        files: ['components/*.scss', 'components/*.sass', 'components/**/*.scss', 'components/**/*.sass','tools/*.sass'],
-        tasks: ['sass:dev', 'autoprefixer'],
+        files: ['components/**/*.sass', 'assets/styles/*.sass'],
+        tasks: ['sass:dev', 'postcss:dev'],
         options: {
           spawn: false
         }
       },
       pug: {
         files: ['pug/*.pug', 'components/**/*.pug'],
-        tasks: ['pug:dev'],
+        tasks: ['pug:compile'],
         options: {
           spawn: false,
           pretty: true
@@ -150,11 +179,14 @@ module.exports = function(grunt) {
       options: {
         logConcurrentOutput: true
       },
-      front: {
+      dev: {
         tasks: ['watch:scripts', 'watch:sass', 'watch:pug', 'watch:reload', 'connect']
       },
-      dev: {
+      prod: {
         tasks: ['watch:scripts', 'watch:sass']
+      },
+      build: {
+        tasks: ['browserify:dist', 'uglify:dist', 'sass:dist', 'postcss:dist', 'concurrent:optimal']
       },
       optimal: {
         tasks: ['imagemin']
@@ -162,12 +194,8 @@ module.exports = function(grunt) {
     }
   });
 
-  //grunt task developerski po wdrożeniu, kompilacja js i sass
-  grunt.registerTask('default', ['concurrent:dev']);
-  //grunt task generujący zminimalizowany kod na produkcję
-  grunt.registerTask('build', ['uglify:dist', 'sass:dist', 'concurrent:optimal']);
-  //grunt task do przeznaczony do tworzenia szablonu, uruchamia live reload server
-  grunt.registerTask('server', ['concurrent:front']);
-  //grunt optymalizacja zdjec
+  grunt.registerTask('dev', ['concurrent:dev']);
+  grunt.registerTask('prod', ['concurrent:prod']);
+  grunt.registerTask('build', ['concurrent:build']);
   grunt.registerTask('optimal', ['concurrent:optimal']);
 };

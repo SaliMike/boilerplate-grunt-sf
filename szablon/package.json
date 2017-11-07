@@ -3,24 +3,30 @@
   "version": "1.0.0",
   "author": "http://softfusion.pl/",
   "scripts": {
+    "preinstall": "npm install -g grunt-cli",
     "installAll": "npm install",
     "installDev": "npm install --only=dev",
     "installProd": "npm install --only=production",
-    "default": "grunt default",
+    "prod": "grunt prod",
     "build": "grunt build",
-    "server": "grunt server"
+    "dev": "grunt dev"
   },
   "devDependencies": {
-    "grunt": "latest",
-    "grunt-autoprefixer": "latest",
+    "autoprefixer": "^7.1.6",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.2.0",
     "grunt-concurrent": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-imagemin": "^2.0.1",
     "grunt-contrib-pug": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
+    "grunt-postcss": "^0.9.0",
     "grunt-sass": "latest",
-    "grunt-task-loader": "latest",
+    "grunt-task-loader": "^0.6.0",
     "time-grunt": "latest"
   },
   "dependencies": {
