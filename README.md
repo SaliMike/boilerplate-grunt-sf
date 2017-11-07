@@ -1,4 +1,4 @@
-<img src="https://cdn.worldvectorlogo.com/logos/grunt.svg" width="128" alt="Grunt Boilerplate-sf">
+<img src="https://cdn.worldvectorlogo.com/logos/grunt.svg" width="128" height="128" alt="Grunt Boilerplate-sf">
 
 ## [Grunt Boilerplate-sf](https://github.com/SaliMike/boilerplate-grunt-sf)
 ### Usage
