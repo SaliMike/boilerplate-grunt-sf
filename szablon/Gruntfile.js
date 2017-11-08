@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-  require('grunt-task-loader')(grunt);
+  require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
 
   grunt.initConfig({
@@ -45,6 +45,21 @@ module.exports = function (grunt) {
           }
         }
       }
+    },
+    mocha: {
+      options: {
+        run: true,
+        log: true,
+        logErrors: true,
+        reporter: 'spec',
+        quiet: false,
+        clearRequireCache: false,
+        clearCacheFilter: (key) => true,
+        noFail: false,
+        ui: 'tdd',
+        require: 'babel-register'
+      },
+      src: ['test/**/*.html']
     },
     sass: {
       dist: {
@@ -198,4 +213,5 @@ module.exports = function (grunt) {
   grunt.registerTask('prod', ['concurrent:prod']);
   grunt.registerTask('build', ['concurrent:build']);
   grunt.registerTask('optimal', ['concurrent:optimal']);
+  grunt.registerTask('test', ['mocha']);
 };
