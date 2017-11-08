@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "author": "http://softfusion.pl/",
   "scripts": {
-    "preinstall": "npm install -g grunt-cli",
     "installAll": "npm install",
     "installDev": "npm install --only=dev",
     "installProd": "npm install --only=production",
     "prod": "grunt prod",
     "build": "grunt build",
-    "dev": "grunt dev"
+    "dev": "grunt dev",
+    "test": "grunt test"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
