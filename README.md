@@ -8,4 +8,4 @@
 	    npm run prod // "prod": "grunt prod",
 	    npm run build // "build": "grunt build",
 	    npm run dev // "dev": "grunt dev"
-	    npm run test // "dev": "grunt test"
+	    npm run test // "test": "grunt test"
