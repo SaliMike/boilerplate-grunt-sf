@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "author": "http://softfusion.pl/",
   "scripts": {
-    "preinstall": "npm install -g grunt-cli",
     "installAll": "npm install",
     "installDev": "npm install --only=dev",
     "installProd": "npm install --only=production",
