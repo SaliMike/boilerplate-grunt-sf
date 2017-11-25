@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     browserify: {
       dev: {
         files: {
-          'scripts/main.min.js': ['components/**/*.js', 'assets/js/**/*.js']
+          'scripts/main.min.js': 'components/main.js'
         },
         options: {
           transform: [
@@ -32,7 +32,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'scripts/main.min.js': ['components/**/*.js', 'assets/js/**/*.js']
+          'scripts/main.min.js': 'components/main.js'
         },
         options: {
           transform: [
