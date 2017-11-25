@@ -1,3 +1,4 @@
+/*eslint-disable */
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
@@ -7,7 +8,7 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         files: {
-          'scripts/main.min.js': 'scripts/main.min.js'
+          'assets/scripts/main.min.js': 'assets/scripts/main.min.js'
         },
         output: {
           comments: false
@@ -17,7 +18,7 @@ module.exports = function (grunt) {
     browserify: {
       dev: {
         files: {
-          'scripts/main.min.js': 'components/main.js'
+          'assets/scripts/main.min.js': 'components/main.js'
         },
         options: {
           transform: [
@@ -32,7 +33,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'scripts/main.min.js': 'components/main.js'
+          'assets/scripts/main.min.js': 'components/main.js'
         },
         options: {
           transform: [
@@ -72,7 +73,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'components',
           src: ['*.sass'],
-          dest: 'css',
+          dest: 'assets/styles',
           ext: '.min.css'
         }]
       },
@@ -86,7 +87,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'components',
           src: ['*.sass'],
-          dest: 'css',
+          dest: 'assets/styles',
           ext: '.min.css'
         }]
       },
@@ -103,8 +104,8 @@ module.exports = function (grunt) {
           ]
         },
         dist: {
-          src: 'css/main.min.css',
-          dest: 'css/main.min.css'
+          src: 'assets/styles/main.min.css',
+          dest: 'assets/styles/main.min.css'
         }
       },
       dist: {
@@ -117,8 +118,8 @@ module.exports = function (grunt) {
           ]
         },
         dist: {
-          src: 'css/main.min.css',
-          dest: 'css/main.min.css'
+          src: 'assets/styles/main.min.css',
+          dest: 'assets/styles/main.min.css'
         }
       }
     },
@@ -143,7 +144,7 @@ module.exports = function (grunt) {
 
     browserSync: {
       bsFiles: {
-        src: ['css/main.min.css', '*.html', 'scripts/main.min.js']
+        src: ['assets/styles/main.min.css', '*.html', 'assets/scripts/main.min.js']
       },
       options: {
         watchTask: true,
@@ -158,20 +159,20 @@ module.exports = function (grunt) {
       dynamic: {
         files: [{
           expand: true,
-          cwd: 'components/',
+          cwd: 'assets/images/',
           src: ['**/*.{png,jpg,gif,svg}'],
-          dest: 'components/'
+          dest: 'assets/images/'
         }]
       }
     },
 
     watch: {
       scripts: {
-        files: ['components/**/*.js', 'assets/js/*.js'],
+        files: ['components/**/*.js', 'assets/scripts/*.js'],
         tasks: ['browserify:dev']
       },
       sass: {
-        files: ['components/**/*.sass', 'assets/styles/*.sass'],
+        files: ['components/**/*.sass', 'utils/styles/*.sass'],
         tasks: ['sass:dev', 'postcss:dev'],
         options: {
           spawn: false
@@ -184,12 +185,6 @@ module.exports = function (grunt) {
           spawn: false,
           pretty: true
         }
-      },
-      reload: {
-        files: ['components/**/src/*', '*.html', 'scripts/*', 'css/*'],
-        options: {
-          livereload: true
-        }
       }
     },
     concurrent: {
@@ -197,7 +192,7 @@ module.exports = function (grunt) {
         logConcurrentOutput: true
       },
       dev: {
-        tasks: ['watch:scripts', 'watch:sass', 'watch:pug', 'watch:reload']
+        tasks: ['watch:scripts', 'watch:sass', 'watch:pug']
       },
       prod: {
         tasks: ['watch:scripts', 'watch:sass']

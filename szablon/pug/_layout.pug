@@ -1,7 +1,17 @@
 doctype html
 html(lang="pl")
+  head
+    title Szablon
 
-  include _head
+    meta(charset='utf-8')
+    meta(name='title', content='Szablon')
+    meta(name='description', content='Szablon opis')
+    meta(name='keywords', content='Szablon keywords')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+
+    include ../components/favicon/favicon
+
+    link(rel='stylesheet', href='assets/styles/main.min.css')
 
   body
     include ../components/loader/loader
@@ -12,4 +22,4 @@ html(lang="pl")
 
     include ../components/footer/footer
 
-    script(src='scripts/main.min.js')
+    script(src='assets/scripts/main.min.js')
