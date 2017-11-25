@@ -22,6 +22,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "grunt": "^1.0.1",
+    "grunt-browser-sync": "^2.2.0",
     "grunt-browserify": "^5.2.0",
     "grunt-concurrent": "latest",
     "grunt-contrib-connect": "latest",

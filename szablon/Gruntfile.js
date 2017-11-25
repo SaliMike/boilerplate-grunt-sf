@@ -141,14 +141,16 @@ module.exports = function (grunt) {
       }
     },
 
-    connect: {
-      all: {
-        options: {
-          port: 9000,
-          hostname: "0.0.0.0",
-          keepalive: true,
-          livereload: true
-        }
+    browserSync: {
+      bsFiles: {
+        src: ['css/main.min.css', '*.html', 'scripts/main.min.js']
+      },
+      options: {
+        watchTask: true,
+        server: {
+          directory: true,
+          baseDir: "./"
+        }, port: 9000
       }
     },
 
@@ -195,7 +197,7 @@ module.exports = function (grunt) {
         logConcurrentOutput: true
       },
       dev: {
-        tasks: ['watch:scripts', 'watch:sass', 'watch:pug', 'watch:reload', 'connect']
+        tasks: ['watch:scripts', 'watch:sass', 'watch:pug', 'watch:reload']
       },
       prod: {
         tasks: ['watch:scripts', 'watch:sass']
@@ -209,7 +211,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('dev', ['concurrent:dev']);
+  grunt.registerTask('dev', ['browserSync', 'concurrent:dev']);
   grunt.registerTask('prod', ['concurrent:prod']);
   grunt.registerTask('build', ['concurrent:build']);
   grunt.registerTask('optimal', ['concurrent:optimal']);
