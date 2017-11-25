@@ -25,7 +25,6 @@
     "grunt-browser-sync": "^2.2.0",
     "grunt-browserify": "^5.2.0",
     "grunt-concurrent": "latest",
-    "grunt-contrib-connect": "latest",
     "grunt-contrib-imagemin": "^2.0.1",
     "grunt-contrib-pug": "latest",
     "grunt-contrib-uglify": "latest",
