@@ -67,7 +67,8 @@ module.exports = function (grunt) {
         options: {
           outputStyle: 'compressed',
           lineNumbers: false,
-          sourceMap: false
+          sourceMap: false,
+          includePaths: ['node_modules']
         },
         files: [{
           expand: true,
@@ -81,7 +82,8 @@ module.exports = function (grunt) {
         options: {
           outputStyle: 'expanded',
           lineNumbers: true,
-          sourceMap: true
+          sourceMap: true,
+          includePaths: ['node_modules']
         },
         files: [{
           expand: true,
