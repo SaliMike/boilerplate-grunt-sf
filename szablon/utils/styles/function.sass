@@ -1,0 +1,34 @@
+// Colors CONVERT
+@function hsb($h-hsb, $s-hsb, $b-hsb, $a: 1)
+  @if $b-hsb == 0
+    @return hsla(0, 0, 0, $a)
+  @else
+    $l-hsl: $b-hsb / 2 * (2 - $s-hsb / 100)
+    $s-hsl: $b-hsb * $s-hsb / if($l-hsl < 50, $l-hsl * 2, 200 - $l-hsl * 2)
+
+    @return hsla($h-hsb, $s-hsl, $l-hsl, $a)
+
+// Colors MAP
+@function colors($color, $tone: "base")
+  @return map-get($color, $tone)
+
+// Z-index MAP
+@function z-index($key)
+  @return map-get($z-index, $key)
+
+// Parser to REM
+@function parse-int($n)
+  @return $n / ($n * 0 + 1)
+
+// REM
+@function rem($value)
+  $root: $base-font-size
+  $val: parse-int($value)
+  $return: ()
+
+  @if unit($value) == "px"
+    $return: append($return, $val / $root + rem)
+  @else
+    $return: append($return, $val * $root + px)
+
+  @return $return
