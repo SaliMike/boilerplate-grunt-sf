@@ -8,7 +8,7 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         files: {
-          'assets/scripts/main.min.js': 'assets/scripts/main.min.js'
+          'assets/scripts/main.min.js': ['assets/scripts/main.min.js']
         },
         output: {
           comments: false
@@ -97,6 +97,7 @@ module.exports = function (grunt) {
 
     postcss: {
       dev: {
+        
         options: {
           map: true,
           processors: [
@@ -105,10 +106,8 @@ module.exports = function (grunt) {
             })
           ]
         },
-        dist: {
-          src: 'assets/styles/main.min.css',
-          dest: 'assets/styles/main.min.css'
-        }
+        src: 'assets/styles/main.min.css',
+        dest: 'assets/styles/main.min.css'
       },
       dist: {
         options: {
@@ -119,10 +118,8 @@ module.exports = function (grunt) {
             })
           ]
         },
-        dist: {
-          src: 'assets/styles/main.min.css',
-          dest: 'assets/styles/main.min.css'
-        }
+        src: 'assets/styles/main.min.css',
+        dest: 'assets/styles/main.min.css'
       }
     },
 
@@ -168,6 +165,12 @@ module.exports = function (grunt) {
       }
     },
 
+    clean: {
+      dist: {
+        src: ['assets/styles', 'assets/scripts']
+      }
+    },
+
     watch: {
       scripts: {
         files: ['components/**/*.js', 'assets/scripts/*.js'],
@@ -190,27 +193,34 @@ module.exports = function (grunt) {
       }
     },
     concurrent: {
-      options: {
-        logConcurrentOutput: true
+      dev:        ['browserify:dev', 'sass:dev'],
+      dev_prefix: ['postcss:dev'],
+      dev_watch:  
+      {
+        tasks:    ['watch:scripts', 'watch:sass', 'watch:pug'],
+        options:  {
+          logConcurrentOutput: true
+        },
       },
-      dev: {
-        tasks: ['watch:scripts', 'watch:sass', 'watch:pug']
+
+      prod:       {
+        tasks: ['watch:scripts', 'watch:sass'],
+        options: {
+          logConcurrentOutput: true
+        },
       },
-      prod: {
-        tasks: ['watch:scripts', 'watch:sass']
-      },
-      build: {
-        tasks: ['browserify:dist', 'uglify:dist', 'sass:dist', 'postcss:dist', 'concurrent:optimal']
-      },
-      optimal: {
-        tasks: ['imagemin']
-      }
+
+      build:      ['browserify:dist', 'sass:dist'],
+      minimal:    ['uglify:dist','postcss:dist'],
     }
   });
+  grunt.registerTask('dev',  ['concurrent:dev', 'concurrent:dev_prefix', 'browserSync', 'concurrent:dev_watch']);
 
-  grunt.registerTask('dev', ['browserSync', 'concurrent:dev']);
   grunt.registerTask('prod', ['concurrent:prod']);
-  grunt.registerTask('build', ['concurrent:build']);
-  grunt.registerTask('optimal', ['concurrent:optimal']);
-  grunt.registerTask('test', ['mocha']);
+
+  grunt.registerTask('build', ['clean:dist', 'concurrent:build','concurrent:minimal']);
+
+  grunt.registerTask('optimal', ['imagemin']);
+  grunt.registerTask('test',    ['mocha']);
+  grunt.registerTask('default', ['dev']);
 };
