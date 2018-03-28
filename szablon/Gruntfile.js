@@ -173,7 +173,7 @@ module.exports = function (grunt) {
 
     watch: {
       scripts: {
-        files: ['components/**/*.js', 'assets/scripts/*.js'],
+        files: ['components/**/*.js'],
         tasks: ['browserify:dev']
       },
       sass: {
