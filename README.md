@@ -2,7 +2,8 @@
 
 ## [Grunt Boilerplate-sf](https://github.com/SaliMike/boilerplate-grunt-sf)
 ### Usage
-	    npm run prod // "prod": "grunt prod",
-	    npm run build // "build": "grunt build",
-	    npm run dev // "dev": "grunt dev"
-	    npm run test // "test": "grunt test"
+    npm run dev     // "dev":     "grunt dev"
+    npm run build   // "build":   "grunt build"
+    npm run prod    // "prod":    "grunt prod"
+    npm run optimal // "optimal": "grunt optimal"
+    npm run test    // "test":    "grunt test"
