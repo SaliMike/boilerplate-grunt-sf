@@ -1,23 +1,20 @@
-@charset 'UTF-8'
+@charset "UTF-8"
 
-// Tools
-@import '../tools/clearfix'
-@import '../tools/color_palette'
-@import '../tools/rem'
-@import '../tools/mixin'
-@import '../tools/reset'
-@import '../tools/responsive'
-@import '../tools/typography'
-@import '../tools/keyframes'
+// Utils
+@import ../utils/styles/reset
+@import ../utils/styles/color_palette
+@import ../utils/styles/variables
+@import ../utils/styles/function
+@import ../utils/styles/mixin
+@import ../utils/styles/typography
+@import ../utils/styles/keyframe
+@import ../utils/styles/base
+@import ../utils/styles/cms
 
-// VENDOR
+// Layout
+@import ./header/header
+@import ./content/content
+@import ./footer/footer
+@import ./loader/loader
 
-// Basic
-@import 'container/container'
-@import 'grid/grid'
-@import 'cmsContainer/cmsContainer'
-@import 'content/content'
-
-// Odpowiedzialne za layout
-
-// Reszta
+// Components

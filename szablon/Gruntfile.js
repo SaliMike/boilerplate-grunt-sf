@@ -1,71 +1,130 @@
-module.exports = function(grunt) {
-  // load all grunt tasks
-  require('grunt-task-loader')(grunt);
+/*eslint-disable */
+module.exports = function (grunt) {
+  require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
 
-  //lista zewnetrznych skryptów
-  var vendorScripts = [
-    'node_modules/jquery/dist/jquery.min.js'
-  ];
-
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     uglify: {
       dist: {
-        src: [vendorScripts, 'libraries/*.js', 'components/**/*.js', '!scripts/main.min.js'],
-        dest: 'scripts/main.min.js'
-      },
-      dev: {
-        src: [vendorScripts, 'libraries/*.js', 'components/**/*.js', '!scripts/main.min.js'],
-        dest: 'scripts/main.min.js',
-        options: {
-          beautify: true,
-          compress: false,
-          mangle: false,
-          sourceMap: true
+        files: {
+          'assets/scripts/main.min.js': ['assets/scripts/main.min.js']
+        },
+        output: {
+          comments: false
         }
       }
+    },
+    browserify: {
+      dev: {
+        files: {
+          'assets/scripts/main.min.js': 'components/main.js'
+        },
+        options: {
+          transform: [
+            ['babelify', {
+              presets: "env"
+            }]
+          ],
+          browserifyOptions: {
+            debug: true
+          }
+        }
+      },
+      dist: {
+        files: {
+          'assets/scripts/main.min.js': 'components/main.js'
+        },
+        options: {
+          transform: [
+            ['babelify', {
+              presets: "env"
+            }]
+          ],
+          browserifyOptions: {
+            debug: false
+          }
+        }
+      }
+    },
+    mocha: {
+      options: {
+        run: true,
+        log: true,
+        logErrors: true,
+        reporter: 'spec',
+        quiet: false,
+        clearRequireCache: false,
+        clearCacheFilter: (key) => true,
+        noFail: false,
+        ui: 'tdd',
+        require: 'babel-register'
+      },
+      src: ['test/**/*.html']
     },
     sass: {
       dist: {
         options: {
           outputStyle: 'compressed',
-          lineNumbers: false
+          lineNumbers: false,
+          sourceMap: false,
+          includePaths: ['node_modules']
         },
         files: [{
           expand: true,
           cwd: 'components',
-          src: ['*.scss', '*.sass'],
-          dest: 'css',
-          ext: '.css'
+          src: ['*.sass'],
+          dest: 'assets/styles',
+          ext: '.min.css'
         }]
       },
       dev: {
         options: {
           outputStyle: 'expanded',
           lineNumbers: true,
-          sourceMap: true
+          sourceMap: true,
+          includePaths: ['node_modules']
         },
         files: [{
           expand: true,
           cwd: 'components',
-          src: ['*.scss', '*.sass'],
-          dest: 'css',
-          ext: '.css'
+          src: ['*.sass'],
+          dest: 'assets/styles',
+          ext: '.min.css'
         }]
       },
-      tasks: ['autoprefixer']
     },
-    autoprefixer: {
-      options: {
-        browsers: ['last 2 versions', 'ie 8', 'ie 9', 'Firefox ESR', 'Opera 12.1']
+
+    postcss: {
+      dev: {
+        
+        options: {
+          map: true,
+          processors: [
+            require('autoprefixer')({
+              browsers: ['last 2 version']
+            })
+          ]
+        },
+        src: 'assets/styles/main.min.css',
+        dest: 'assets/styles/main.min.css'
       },
       dist: {
-        src: 'css/main.css',
-        dest: 'css/main.css'
+        options: {
+          map: false,
+          processors: [
+            require('autoprefixer')({
+              browsers: ['last 2 version']
+            })
+          ]
+        },
+        src: 'assets/styles/main.min.css',
+        dest: 'assets/styles/main.min.css'
       }
     },
+
     pug: {
-      dev: {
+      compile: {
         options: {
           pretty: true,
           data: {
@@ -79,95 +138,89 @@ module.exports = function(grunt) {
           dest: '',
           ext: '.html'
         }]
+      }
+    },
+
+    browserSync: {
+      bsFiles: {
+        src: ['assets/styles/main.min.css', '*.html', 'assets/scripts/main.min.js']
       },
-      dist: {
-        options: {
-          data: {
-            debug: false
-          },
-          pretty: false
-        },
-        files: [{
-          expand: true,
-          cwd: 'pug',
-          src: ['*.pug', '!_*.pug'],
-          dest: '',
-          ext: '.html'
-        }]
+      options: {
+        watchTask: true,
+        server: {
+          directory: true,
+          baseDir: "./"
+        }, port: 9000
       }
     },
-    connect: {
-      all: {
-        options:{
-          port: 9000,
-          hostname: "0.0.0.0",
-          keepalive: true,
-          livereload: true
-        }
-      }
-    },
+
     imagemin: {
       dynamic: {
         files: [{
           expand: true,
-          cwd: 'components/',
+          cwd: 'assets/images/',
           src: ['**/*.{png,jpg,gif,svg}'],
-          dest: 'components/'
+          dest: 'assets/images/'
         }]
       }
     },
+
+    clean: {
+      dist: {
+        src: ['assets/styles', 'assets/scripts']
+      }
+    },
+
     watch: {
       scripts: {
-        files: ['!scripts/main.min.js', 'libraries/*.js', 'scripts/vendor/*.js', 'components/*.js', 'components/**/*.js'],
-        tasks: ['uglify:dev'],
-        options: {
-          spawn: false
-        }
+        files: ['components/**/*.js'],
+        tasks: ['browserify:dev']
       },
       sass: {
-        files: ['components/*.scss', 'components/*.sass', 'components/**/*.scss', 'components/**/*.sass','tools/*.sass'],
-        tasks: ['sass:dev', 'autoprefixer'],
+        files: ['components/**/*.sass', 'utils/styles/*.sass'],
+        tasks: ['sass:dev', 'postcss:dev'],
         options: {
           spawn: false
         }
       },
       pug: {
         files: ['pug/*.pug', 'components/**/*.pug'],
-        tasks: ['pug:dev'],
+        tasks: ['pug:compile'],
         options: {
           spawn: false,
           pretty: true
         }
-      },
-      reload: {
-        files: ['components/*/src/*', '*.html', 'scripts/*', 'css/*'],
-        options: {
-          livereload: true
-        }
       }
     },
     concurrent: {
-      options: {
-        logConcurrentOutput: true
+      dev:        ['browserify:dev', 'sass:dev'],
+      dev_prefix: ['postcss:dev'],
+      dev_watch:  
+      {
+        tasks:    ['watch:scripts', 'watch:sass', 'watch:pug'],
+        options:  {
+          logConcurrentOutput: true
+        },
       },
-      front: {
-        tasks: ['watch:scripts', 'watch:sass', 'watch:pug', 'watch:reload', 'connect']
+
+      prod:       {
+        tasks: ['watch:scripts', 'watch:sass'],
+        options: {
+          logConcurrentOutput: true
+        },
       },
-      dev: {
-        tasks: ['watch:scripts', 'watch:sass']
-      },
-      optimal: {
-        tasks: ['imagemin']
-      }
+
+      build:      ['browserify:dist', 'sass:dist'],
+      minimal:    ['uglify:dist','postcss:dist'],
     }
   });
+  grunt.registerTask('dev',  ['concurrent:dev', 'concurrent:dev_prefix', 'browserSync', 'concurrent:dev_watch']);
 
-  //grunt task developerski po wdrożeniu, kompilacja js i sass
-  grunt.registerTask('default', ['concurrent:dev']);
-  //grunt task generujący zminimalizowany kod na produkcję
-  grunt.registerTask('build', ['uglify:dist', 'sass:dist', 'concurrent:optimal']);
-  //grunt task do przeznaczony do tworzenia szablonu, uruchamia live reload server
-  grunt.registerTask('server', ['concurrent:front']);
-  //grunt optymalizacja zdjec
-  grunt.registerTask('optimal', ['concurrent:optimal']);
+  grunt.registerTask('prod', ['concurrent:prod']);
+
+  grunt.registerTask('build', ['clean:dist', 'concurrent:build','concurrent:minimal']);
+
+  grunt.registerTask('optimal', ['imagemin']);
+  grunt.registerTask('test',    ['mocha']);
+  grunt.registerTask('default', ['dev']);
 };

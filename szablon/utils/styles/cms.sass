@@ -1,0 +1,123 @@
+=cms
+  display: block
+  width: 100%
+  padding: 0 5px
+
+  //HTML Text
+  p
+    font-size: 18px
+    font-weight: 300
+
+    +max(767px)
+      font-size: 16px
+
+  //HTML Text Formatting Elements
+  strong
+    font-weight: 700
+
+  b
+    font-weight: 500
+
+  em, i
+    font-style: italic
+
+  u, ins
+    text-decoration: underline
+
+  small
+    font-size: smaller
+
+  mark
+    background-color: $yellow
+    color: inherit
+
+  del
+    text-decoration: line-through
+
+  sub
+    font-size: smaller
+    vertical-align: sub
+
+  sup
+    font-size: smaller
+    vertical-align: super
+
+  //HTML Lists
+  ul
+    display: block
+    padding-left: 20px
+    list-style-type: disc
+
+  ol
+    display: block
+    padding-left: 20px
+    list-style-type: decimal
+
+  li
+    display: list-item
+    text-align: match-parent
+
+  //HTML Tables
+  table
+    display: table
+    width: 100%
+    border-color: $mine-shaft
+    color: $mine-shaft
+    border-collapse: collapse
+    border-spacing: 2px
+
+  tr
+    display: table-row
+    border-color: inherit
+    background-color: $white
+    vertical-align: inherit
+
+    &:nth-child(even)
+      background-color: $alto
+
+  td, th
+    padding: 8px
+    border: 1px solid $mine-shaft
+    text-align: left
+
+  // Image
+  img
+    display: block
+    max-width: 100%
+    height: auto
+    margin: 0 auto
+
+  // Link
+  a
+    color: inherit
+    text-decoration: none
+
+  // Grid
+  .cms-col-25
+    width: 25%
+    padding: 15px
+    float: left
+
+    +max(767px)
+      width: 100%
+
+  .cms-col-33
+    width: 33.33%
+    padding: 15px
+    float: left
+
+    +max(767px)
+      width: 100%
+
+  .cms-col-50
+    width: 50%
+    padding: 15px
+    float: left
+
+    +max(767px)
+      width: 100%
+
+  //- TODO: Napisac od nowa bo czesto jest z tym problem
+
+.cmsContainer
+  +cms
