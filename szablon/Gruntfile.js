@@ -2,6 +2,7 @@
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
+  const webpackConfig = require('./webpack.config');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -10,42 +11,12 @@ module.exports = function (grunt) {
         files: {
           'assets/scripts/main.min.js': ['assets/scripts/main.min.js']
         },
-        output: {
-          comments: false
-        }
       }
     },
-    browserify: {
-      dev: {
-        files: {
-          'assets/scripts/main.min.js': 'components/main.js'
-        },
-        options: {
-          transform: [
-            ['babelify', {
-              presets: "env"
-            }]
-          ],
-          browserifyOptions: {
-            debug: true
-          }
-        }
-      },
-      dist: {
-        files: {
-          'assets/scripts/main.min.js': 'components/main.js'
-        },
-        options: {
-          transform: [
-            ['babelify', {
-              presets: "env"
-            }]
-          ],
-          browserifyOptions: {
-            debug: false
-          }
-        }
-      }
+    webpack: {
+      options: {},
+      prod: webpackConfig,
+      dev: webpackConfig,
     },
     mocha: {
       options: {
@@ -97,7 +68,6 @@ module.exports = function (grunt) {
 
     postcss: {
       dev: {
-        
         options: {
           map: true,
           processors: [
@@ -173,27 +143,25 @@ module.exports = function (grunt) {
 
     watch: {
       scripts: {
-        files: ['components/**/*.js'],
-        tasks: ['browserify:dev']
+        files: ['components/**/*.js', 'utils/scripts/*.js'],
+        tasks: ['webpack:dev']
       },
       sass: {
-        files: ['components/**/*.sass', 'utils/styles/*.sass'],
+        files: ['components/**/*.sass', 'utils/styles/*.sass', 'utils/styles/*.scss'],
         tasks: ['sass:dev', 'postcss:dev'],
-        options: {
-          spawn: false
-        }
       },
       pug: {
         files: ['pug/*.pug', 'components/**/*.pug'],
         tasks: ['pug:compile'],
-        options: {
-          spawn: false,
-          pretty: true
-        }
+
+      },
+      options: {
+        spawn: false,
+        pretty: true
       }
     },
     concurrent: {
-      dev:        ['browserify:dev', 'sass:dev'],
+      dev:        ['webpack:dev', 'sass:dev'],
       dev_prefix: ['postcss:dev'],
       dev_watch:  
       {
@@ -210,7 +178,7 @@ module.exports = function (grunt) {
         },
       },
 
-      build:      ['browserify:dist', 'sass:dist'],
+      build:      ['webpack:prod', 'sass:dist'],
       minimal:    ['uglify:dist','postcss:dist'],
     }
   });
