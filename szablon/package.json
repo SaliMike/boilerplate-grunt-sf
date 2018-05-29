@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "author": "http://softfusion.pl/",
   "scripts": {
-    "prod": "grunt prod",
+    "prod":  "grunt prod",
     "build": "grunt build",
-    "dev": "grunt dev",
+    "dev":   "grunt dev",
+    "html":  "grunt html",
     "test": "grunt test"
   },
   "devDependencies": {

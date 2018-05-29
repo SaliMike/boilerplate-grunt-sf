@@ -188,6 +188,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', ['clean:dist', 'concurrent:build','concurrent:minimal']);
 
+  grunt.registerTask('html',    ['pug:compile'])
   grunt.registerTask('optimal', ['imagemin']);
   grunt.registerTask('test',    ['mocha']);
   grunt.registerTask('default', ['dev']);
